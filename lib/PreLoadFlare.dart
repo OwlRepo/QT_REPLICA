@@ -1,9 +1,16 @@
 import 'package:flare_flutter/asset_provider.dart';
 import 'package:flare_flutter/flare_cache.dart';
 import 'package:flare_flutter/provider/asset_flare.dart';
+import 'package:flutter/services.dart';
 
-final AssetProvider assetProvider = AssetFlare(name: 'assets/Animations/MicButtonSend.flr');
+
+const _assetsToWarmup = [
+  "assets/Animations/MicButtonSend.flr",
+];
 
 Future<void> PreLoadFlare() async {
-await cachedActor(assetProvider);
+  for (final filename in _assetsToWarmup) {
+    await cachedActor(AssetFlare(bundle: rootBundle, name: filename));
+    await Future<void>.delayed(const Duration(milliseconds: 16));
+  }
 }

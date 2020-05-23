@@ -39,7 +39,7 @@ class PressToTalk extends StatelessWidget {
                       return Card(
                         elevation: 5.0,
                         child: ListTile(
-                          leading: FaIcon(FontAwesomeIcons.user),
+                          leading: FaIcon(FontAwesomeIcons.solidUserCircle),
                           title: Text(memberList[index]),
                           onTap: () {
                             widgetHelper.selectedMember = memberList[index];
@@ -105,9 +105,8 @@ class PressToTalk extends StatelessWidget {
                 SizedBox(height: 20.0),
                 Expanded(
                   flex: 1,
-                  child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+                  child: Container(
+                    padding: EdgeInsets.only(left:20.0,right:20.0),
                     child: GestureDetector(
                       onTap: () {
                         createAlertDialog();
@@ -118,16 +117,16 @@ class PressToTalk extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20.0),
                         ),
                         child: ListTile(
-                          leading: FaIcon(FontAwesomeIcons.users),
+                          leading: FaIcon(FontAwesomeIcons.solidUserCircle),
                           title: Text(widgetHelper.selectedMember),
-                          trailing: FaIcon(FontAwesomeIcons.list),
+                          trailing: FaIcon(FontAwesomeIcons.list,size: 15.0,),
                         ),
                       ),
                     ),
                   ),
                 ),
                 Expanded(
-                  flex: 8,
+                  flex: 9,
                   child: GestureDetector(
                     onLongPress: () {
                       widgetHelper.micButtonAnimation = 'OnPressedStart';
@@ -139,6 +138,7 @@ class PressToTalk extends StatelessWidget {
                       print('NOT ANYMORE');
                     },
                     child: Container(
+                      padding: EdgeInsets.only(bottom:65.0),
                       child: FlareActor(
                         'assets/Animations/MicButtonSend.flr',
                         alignment: Alignment.center,

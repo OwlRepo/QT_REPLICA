@@ -17,6 +17,8 @@ class HomePage extends StatelessWidget {
       TabsinaTab(),
       MyAccount(),
     ];
+
+
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -32,7 +34,7 @@ class HomePage extends StatelessWidget {
                   selectedItemColor: Colors.white,
                   unselectedItemColor: Colors.grey,
                   currentIndex: widgetHelper.currentIndexBottomNav,
-                  onTap: (index) {
+                  onTap: (index) async {
                     widgetHelper.currentIndex = index;
                     widgetHelper.micButtonAnimation = 'Normal';
                   },
@@ -79,36 +81,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-// selectedTab[widgetHelper.currentIndexBottomNav]
-
-//  BottomNavigationBar(
-
-//         selectedItemColor: Colors.white,
-//         unselectedItemColor: Colors.grey,
-//         currentIndex: widgetHelper.currentIndexBottomNav,
-//         onTap: (index){
-//           widgetHelper.currentIndex = index;
-//         },
-//         items: [
-//           BottomNavigationBarItem(
-//             icon: FaIcon(FontAwesomeIcons.users),
-//             title: Text(''),
-//             backgroundColor: Color.fromRGBO(46, 24, 89, 1),
-//           ),
-//           BottomNavigationBarItem(
-//             icon: FaIcon(FontAwesomeIcons.microphone),
-//             title: Text(''),
-//             backgroundColor: Color.fromRGBO(46, 24, 89, 1),
-//           ),
-//           BottomNavigationBarItem(
-//             icon: FaIcon(FontAwesomeIcons.briefcase),
-//             title: Text(''),
-//             backgroundColor: Color.fromRGBO(46, 24, 89, 1),
-//           ),
-//           BottomNavigationBarItem(
-//             icon: FaIcon(FontAwesomeIcons.userAlt),
-//             title: Text(''),
-//             backgroundColor: Color.fromRGBO(46, 24, 89, 1),
-//           ),
-//         ],
-//       ),

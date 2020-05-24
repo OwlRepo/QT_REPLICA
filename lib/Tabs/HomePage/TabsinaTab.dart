@@ -72,6 +72,7 @@ class _TabsinaTabState extends State<TabsinaTab>
         Expanded(
           flex: 12,
           child: TabBarView(
+            physics: NeverScrollableScrollPhysics(),
             controller: _tabController,
             children: _selectedTab,
           ),

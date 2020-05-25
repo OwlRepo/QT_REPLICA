@@ -2,15 +2,6 @@ import 'package:flutter/material.dart';
 
 class WidgetHelper with ChangeNotifier {
 
-  //MIC ANIMATION HELPEr  
-  String _selectedAnimation = '';
-
-  String get selectedAnimation => _selectedAnimation;
-
-  set selectedAnimation(String value) {
-    _selectedAnimation = value;
-    notifyListeners();
-  }
 
   //BOTTOM NAV BAR HELPER
   int _currentIndexBottomNav = 1;
@@ -22,6 +13,7 @@ class WidgetHelper with ChangeNotifier {
     notifyListeners();
   }
 
+  //MIC ANIMATION HELPER
   String _micButtonAnimation = 'Normal';
 
   String get micButtonAnimation => _micButtonAnimation;
@@ -30,7 +22,7 @@ class WidgetHelper with ChangeNotifier {
     _micButtonAnimation = value;
     notifyListeners();
   }
-
+  //MEMBER SELECTION HELPER
   String _selectedMember = 'Member 1';
 
   String get selectedMember => _selectedMember;

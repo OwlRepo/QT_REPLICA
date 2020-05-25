@@ -12,7 +12,9 @@ class Groups extends StatelessWidget {
         Expanded(
           flex: 1,
           child: Container(
-            color: Color.fromRGBO(46, 24, 89, 1),
+            decoration: BoxDecoration(
+              image: DecorationImage(image: AssetImage('assets/Images/group_banner.png'),fit: BoxFit.cover),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [

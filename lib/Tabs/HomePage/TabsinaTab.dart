@@ -39,9 +39,7 @@ class _TabsinaTabState extends State<TabsinaTab>
         Expanded(
           flex: 1,
           child: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(image: AssetImage('assets/Images/group_banner.png'),fit: BoxFit.cover),
-            ),
+            color: Color.fromRGBO(46, 24, 89, 1),
             child: TabBar(
               indicatorColor: Colors.purple,
               controller: _tabController,

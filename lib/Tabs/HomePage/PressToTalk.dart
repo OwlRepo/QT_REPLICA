@@ -182,9 +182,7 @@ class _PressToTalkState extends State<PressToTalk> {
         Expanded(
           flex: 1,
           child: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(image: AssetImage('assets/Images/group_banner.png'),fit: BoxFit.cover),
-            ),
+            color: Color.fromRGBO(46, 24, 89, 1),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [

@@ -1,5 +1,6 @@
 import 'package:flare_flutter/flare_cache.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:quicktalk_replica/Pages/HomePage.dart';
 import 'package:provider/provider.dart';
@@ -38,6 +39,10 @@ Future<void> requestPermissions() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    FlutterStatusbarcolor.setStatusBarColor(Color.fromRGBO(46, 24, 89, 1));
+    FlutterStatusbarcolor.setStatusBarWhiteForeground(true);
+    FlutterStatusbarcolor.setNavigationBarColor(Color.fromRGBO(46, 24, 89, 1));
+    FlutterStatusbarcolor.setNavigationBarWhiteForeground(true);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',

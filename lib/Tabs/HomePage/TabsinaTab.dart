@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quicktalk_replica/Tabs/TabsinaTab/DailyTimeRecord.dart';
 import 'package:quicktalk_replica/Tabs/TabsinaTab/MyLogBook.dart';
 import 'package:quicktalk_replica/Tabs/TabsinaTab/UserLocation.dart';
+import 'package:responsive_widgets/responsive_widgets.dart';
 
 class TabsinaTab extends StatefulWidget {
   @override
@@ -37,40 +38,50 @@ class _TabsinaTabState extends State<TabsinaTab>
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Expanded(
-          flex: 1,
-          child: Container(
-            color: Color.fromRGBO(46, 24, 89, 1),
-            child: TabBar(
-              indicatorColor: Colors.purple,
-              controller: _tabController,
-              tabs: <Tab>[
-                Tab(
-                  child: Text(
-                    'USER\nLOCATION',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 13.0),
-                  ),
+          flex: 2,
+          child: ColorFiltered(
+            colorFilter: ColorFilter.mode(Color.fromRGBO(46, 24, 89, 1), BlendMode.color),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(46, 24, 89, 1),
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage('assets/Images/group_banner.png'),
                 ),
-                Tab(
-                  child: Text(
-                    'DAILY TIME\nRECORD',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 13.0),
+              ),
+              child: TabBar(
+                labelPadding: EdgeInsets.only(top:40.0,),
+                indicatorColor: Colors.purple,
+                controller: _tabController,
+                tabs: <Tab>[
+                  Tab(
+                    child: Text(
+                      'USER\nLOCATION',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 13.0),
+                    ),
                   ),
-                ),
-                Tab(
-                  child: Text(
-                    'MY LOG BOOK',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 13.0),
+                  Tab(
+                    child: Text(
+                      'DAILY TIME\nRECORD',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 13.0),
+                    ),
                   ),
-                ),
-              ],
+                  Tab(
+                    child: Text(
+                      'MY LOG BOOK',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 13.0),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
         Expanded(
-          flex: 12,
+          flex: 15,
           child: TabBarView(
             physics: NeverScrollableScrollPhysics(),
             controller: _tabController,

@@ -2,33 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:chewie/chewie.dart';
 import 'package:video_player/video_player.dart';
 
-class videoListItems extends StatefulWidget {
+class VideoListItems extends StatefulWidget {
   @override
-  _videoListItemsState createState() => _videoListItemsState();
+  _VideoListItemsState createState() => _VideoListItemsState();
   final VideoPlayerController videoPlayerController;
   final bool looping;
 
-  videoListItems({
+  VideoListItems({
     @required this.videoPlayerController,
     this.looping,
     Key key,
   }) : super(key: key);
 }
 
-class _videoListItemsState extends State<videoListItems> {
+class _VideoListItemsState extends State<VideoListItems> {
   ChewieController _chewieController;
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
-
     _chewieController = ChewieController(
       videoPlayerController: widget.videoPlayerController,
-      aspectRatio: 16 / 9,
-      autoInitialize: true,
+      aspectRatio: 16/9,
       autoPlay: true,
+      autoInitialize: true,
       looping: widget.looping,
-      showControlsOnInitialize: false,
       showControls: false,
       errorBuilder: (context, message) {
         return Center(
@@ -36,16 +33,21 @@ class _videoListItemsState extends State<videoListItems> {
         );
       },
     );
+
+    super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
-    return Chewie(
-      controller: _chewieController,
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      child: Chewie(
+        controller: _chewieController,
+      ),
     );
   }
 
-  
   @override
   void dispose() {
     // TODO: implement dispose

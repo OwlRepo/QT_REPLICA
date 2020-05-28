@@ -18,65 +18,62 @@ class HomePage extends StatelessWidget {
       MyAccount(),
     ];
 
-
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            selectedTab[widgetHelper.currentIndexBottomNav],
-            Positioned(
-              left: 20,
-              right: 20,
-              bottom: 30,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(50.0),
-                child: BottomNavigationBar(
-                  selectedItemColor: Colors.white,
-                  unselectedItemColor: Colors.grey,
-                  currentIndex: widgetHelper.currentIndexBottomNav,
-                  onTap: (index) async {
-                    widgetHelper.currentIndex = index;
-                    widgetHelper.micButtonAnimation = 'Normal';
-                  },
-                  items: [
-                    BottomNavigationBarItem(
-                      icon: FaIcon(
-                        FontAwesomeIcons.users,
-                        size: 20.0,
-                      ),
-                      title: Text(''),
-                      backgroundColor: Color.fromRGBO(46, 24, 89, 1),
+      body: Stack(
+        children: [
+          selectedTab[widgetHelper.currentIndexBottomNav],
+          Positioned(
+            left: 20,
+            right: 20,
+            bottom: 30,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(50.0),
+              child: BottomNavigationBar(
+                selectedItemColor: Colors.white,
+                unselectedItemColor: Colors.grey,
+                currentIndex: widgetHelper.currentIndexBottomNav,
+                onTap: (index) async {
+                  widgetHelper.currentIndex = index;
+                  widgetHelper.micButtonAnimation = 'Normal';
+                },
+                items: [
+                  BottomNavigationBarItem(
+                    icon: FaIcon(
+                      FontAwesomeIcons.users,
+                      size: 20.0,
                     ),
-                    BottomNavigationBarItem(
-                      icon: FaIcon(
-                        FontAwesomeIcons.microphone,
-                        size: 20.0,
-                      ),
-                      title: Text(''),
-                      backgroundColor: Color.fromRGBO(46, 24, 89, 1),
+                    title: Text(''),
+                    backgroundColor: Color.fromRGBO(46, 24, 89, 1),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: FaIcon(
+                      FontAwesomeIcons.microphone,
+                      size: 20.0,
                     ),
-                    BottomNavigationBarItem(
-                      icon: FaIcon(
-                        FontAwesomeIcons.briefcase,
-                        size: 20.0,
-                      ),
-                      title: Text(''),
-                      backgroundColor: Color.fromRGBO(46, 24, 89, 1),
+                    title: Text(''),
+                    backgroundColor: Color.fromRGBO(46, 24, 89, 1),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: FaIcon(
+                      FontAwesomeIcons.briefcase,
+                      size: 20.0,
                     ),
-                    BottomNavigationBarItem(
-                      icon: FaIcon(
-                        FontAwesomeIcons.userAlt,
-                        size: 20.0,
-                      ),
-                      title: Text(''),
-                      backgroundColor: Color.fromRGBO(46, 24, 89, 1),
+                    title: Text(''),
+                    backgroundColor: Color.fromRGBO(46, 24, 89, 1),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: FaIcon(
+                      FontAwesomeIcons.userAlt,
+                      size: 20.0,
                     ),
-                  ],
-                ),
+                    title: Text(''),
+                    backgroundColor: Color.fromRGBO(46, 24, 89, 1),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

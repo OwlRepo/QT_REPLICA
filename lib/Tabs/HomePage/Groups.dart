@@ -10,31 +10,41 @@ class Groups extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Expanded(
-          flex: 1,
-          child: Container(
-            color: Color.fromRGBO(46, 24, 89, 1),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  padding: EdgeInsets.only(
-                    left: 30.0,
-                  ),
-                  child: Text(
-                    'Groups',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 15.0,
+          flex: 2,
+          child: ColorFiltered(
+            colorFilter: ColorFilter.mode(
+                Color.fromRGBO(46, 24, 89, 1), BlendMode.color),
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage('assets/Images/group_banner.png'),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(
+                      top: 30.0,
+                      left: 30.0,
+                    ),
+                    child: Text(
+                      'Groups',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 18.0,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
         Expanded(
-          flex: 12,
+          flex: 15,
           child: Container(
             color: Color.fromRGBO(238, 231, 239, 1),
             padding: EdgeInsets.symmetric(
@@ -42,20 +52,19 @@ class Groups extends StatelessWidget {
               vertical: 20.0,
             ),
             child: ListView.builder(
-              
               itemCount: groupList.length,
               itemBuilder: (context, index) {
                 return Card(
-
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                   elevation: 5.0,
                   child: ListTile(
-                    onTap:(){print(groupList[index]);},
+                    onTap: () {
+                      print(groupList[index]);
+                    },
                     title: Text(groupList[index]),
                     leading: FaIcon(FontAwesomeIcons.users),
-                    
                   ),
                 );
               },

@@ -31,7 +31,7 @@ class _PressToTalkState extends State<PressToTalk> {
 
   //All of this is for recording the audio when the mic button is onhold
   //NOTE: Always use the _init() fucntion after recording
-  
+
   FlutterAudioRecorder _recorder;
   Recording _current;
   RecordingStatus _currentStatus = RecordingStatus.Unset;
@@ -78,6 +78,7 @@ class _PressToTalkState extends State<PressToTalk> {
       print(e);
     }
   }
+
   //Start recording
   _start() async {
     try {
@@ -104,6 +105,7 @@ class _PressToTalkState extends State<PressToTalk> {
       print(e);
     }
   }
+
   //Stop recording
   _stop() async {
     var result = await _recorder.stop();
@@ -123,7 +125,11 @@ class _PressToTalkState extends State<PressToTalk> {
     super.initState();
   }
   //END
-
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final widgetHelper = Provider.of<WidgetHelper>(context);
@@ -180,31 +186,44 @@ class _PressToTalkState extends State<PressToTalk> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Expanded(
-          flex: 1,
-          child: Container(
-            color: Color.fromRGBO(46, 24, 89, 1),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  padding: EdgeInsets.only(
-                    left: 30.0,
-                  ),
-                  child: Text(
-                    'Press To Talk',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 15.0,
-                    ),
+          flex: 2,
+          child: ColorFiltered(
+            colorFilter: ColorFilter.mode(
+                Color.fromRGBO(46, 24, 89, 1), BlendMode.color),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(46, 24, 89, 1),
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage(
+                    'assets/Images/group_banner.png',
                   ),
                 ),
-              ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(
+                      top:30.0,
+                      left: 30.0,
+                    ),
+                    child: Text(
+                      'Press To Talk',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 18.0,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
         Expanded(
-          flex: 12,
+          flex: 15,
           child: Container(
             color: Color.fromRGBO(238, 231, 239, 1),
             child: Column(

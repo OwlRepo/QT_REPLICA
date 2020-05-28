@@ -2,15 +2,21 @@ import 'package:flare_flutter/flare_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:quicktalk_replica/Pages/HomePage.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:quicktalk_replica/PreLoadFlare.dart';
 import 'package:quicktalk_replica/Provider/UserLocationProvider.dart';
 import 'package:quicktalk_replica/Provider/WidgetHelper.dart';
 import 'dart:async';
 
+import 'package:quicktalk_replica/SplashScreen.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   FlareCache.doesPrune = false;
   PreLoadFlare();
   requestPermissions();
@@ -39,7 +45,7 @@ Future<void> requestPermissions() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    FlutterStatusbarcolor.setStatusBarColor(Color.fromRGBO(46, 24, 89, 1));
+    FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
     FlutterStatusbarcolor.setStatusBarWhiteForeground(true);
     FlutterStatusbarcolor.setNavigationBarColor(Color.fromRGBO(46, 24, 89, 1));
     FlutterStatusbarcolor.setNavigationBarWhiteForeground(true);
@@ -50,7 +56,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: HomePage(),
+      home: SplashScreen(),
     );
   }
 }

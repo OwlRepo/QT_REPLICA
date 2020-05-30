@@ -13,7 +13,7 @@ class DailyTimeRecord extends StatelessWidget {
     List<String> timeDateLoc = [
       'Time : Display Current Time here',
       'Date: Display Current Date here',
-      'Location: Displat Current Location here',
+      'Location: Display Current Location here',
     ];
 
     List timeDateLocIcons = [
@@ -110,7 +110,7 @@ class DailyTimeRecord extends StatelessWidget {
         Expanded(
           flex: 3,
           child: Container(
-            padding:EdgeInsets.only(top:30.0),
+            padding: EdgeInsets.only(top: 30.0),
             color: Color.fromRGBO(238, 231, 239, 1),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -119,37 +119,44 @@ class DailyTimeRecord extends StatelessWidget {
                 Expanded(
                   flex: 2,
                   child: Container(
-                    padding: EdgeInsets.only(left:20.0,right:20.0,),
+                    padding: EdgeInsets.only(
+                      left: 20.0,
+                      right: 20.0,
+                    ),
                     child: Card(
                       elevation: 10.0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),
                       ),
-                      child: ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: timeDateLoc.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                            child: ListTile(
-                              leading: FaIcon(
-                                timeDateLocIcons[index],
-                                color: Color.fromRGBO(46, 24, 89, 1),
-                              ),
-                              title: Text(
-                                timeDateLoc[index],
-                                style: TextStyle(
-                                  fontSize: 15.0,
+                      child: MediaQuery.removePadding(
+                        context: context,
+                        removeTop: true,
+                        child: ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: timeDateLoc.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                              child: ListTile(
+                                leading: FaIcon(
+                                  timeDateLocIcons[index],
+                                  color: Color.fromRGBO(46, 24, 89, 1),
+                                ),
+                                title: Text(
+                                  timeDateLoc[index],
+                                  style: TextStyle(
+                                    fontSize: 15.0,
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
                 ),
-                SizedBox(height:20.0),
+                SizedBox(height: 20.0),
                 Expanded(
                   flex: 3,
                   child: Container(

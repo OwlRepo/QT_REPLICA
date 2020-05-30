@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:responsive_widgets/responsive_widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -92,7 +93,49 @@ class _MyAccountState extends State<MyAccount> {
                 fit: StackFit.loose,
                 alignment: Alignment.topCenter,
                 overflow: Overflow.visible,
+                clipBehavior: Clip.none,
                 children: [
+                  Positioned(
+                    top: -43.0,
+                    child: Container(
+                      height: 80.0,
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.only(
+                          left: MediaQuery.of(context).size.width * 0.07,
+                          right: MediaQuery.of(context).size.width * 0.07),
+                      child: Card(
+                        elevation: 10.0,
+                        shadowColor: Color.fromRGBO(46, 24, 89, 1),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                        child: Center(
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'ROM\n',
+                                  style: TextStyle(
+                                    color: Color.fromRGBO(46, 24, 89, 1),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20.0,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: 'Romeo Angeles Jr',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 13.0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                   Positioned(
                     top: 50.0,
                     child: Container(
@@ -185,47 +228,6 @@ class _MyAccountState extends State<MyAccount> {
                             ),
                           ),
                         ],
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: -43.0,
-                    child: Container(
-                      height: 80.0,
-                      width: MediaQuery.of(context).size.width,
-                      padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).size.width * 0.07,
-                          right: MediaQuery.of(context).size.width * 0.07),
-                      child: Card(
-                        elevation: 10.0,
-                        shadowColor: Color.fromRGBO(46, 24, 89, 1),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50.0),
-                        ),
-                        child: Center(
-                          child: RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: 'ROM\n',
-                                  style: TextStyle(
-                                    color: Color.fromRGBO(46, 24, 89, 1),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20.0,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: 'Romeo Angeles Jr',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 13.0,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
                       ),
                     ),
                   ),

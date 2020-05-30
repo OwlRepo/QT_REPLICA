@@ -9,6 +9,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:quicktalk_replica/Provider/WidgetHelper.dart';
+import 'dart:typed_data';
+import 'package:sound_stream/sound_stream.dart';
 
 class PressToTalk extends StatefulWidget {
   @override
@@ -32,104 +34,167 @@ class _PressToTalkState extends State<PressToTalk> {
   //All of this is for recording the audio when the mic button is onhold
   //NOTE: Always use the _init() fucntion after recording
 
-  FlutterAudioRecorder _recorder;
-  Recording _current;
-  RecordingStatus _currentStatus = RecordingStatus.Unset;
+//   FlutterAudioRecorder _recorder;
+//   Recording _current;
+//   RecordingStatus _currentStatus = RecordingStatus.Unset;
 
-  //Initialize Access for mic.
-  _init() async {
-    try {
-      if (await FlutterAudioRecorder.hasPermissions) {
-        String customPath = '/QTAudioRecording';
-        io.Directory appDocDirectory;
-//        io.Directory appDocDirectory = await getApplicationDocumentsDirectory();
-        if (io.Platform.isIOS) {
-          appDocDirectory = await getApplicationDocumentsDirectory();
-        } else {
-          appDocDirectory = await getExternalStorageDirectory();
-        }
+//   //Initialize Access for mic.
+//   _init() async {
+//     try {
+//       if (await FlutterAudioRecorder.hasPermissions) {
+//         String customPath = '/QTAudioRecording';
+//         io.Directory appDocDirectory;
+// //        io.Directory appDocDirectory = await getApplicationDocumentsDirectory();
+//         if (io.Platform.isIOS) {
+//           appDocDirectory = await getApplicationDocumentsDirectory();
+//         } else {
+//           appDocDirectory = await getExternalStorageDirectory();
+//         }
 
-        // can add extension like ".mp4" ".wav" ".m4a" ".aac"
-        customPath = appDocDirectory.path +
-            customPath +
-            DateTime.now().millisecondsSinceEpoch.toString();
+//         // can add extension like ".mp4" ".wav" ".m4a" ".aac"
+//         customPath = appDocDirectory.path +
+//             customPath +
+//             DateTime.now().millisecondsSinceEpoch.toString();
 
-        // .wav <---> AudioFormat.WAV
-        // .mp4 .m4a .aac <---> AudioFormat.AAC
-        // AudioFormat is optional, if given value, will overwrite path extension when there is conflicts.
-        _recorder = FlutterAudioRecorder(customPath,
-            audioFormat: AudioFormat.WAV, sampleRate: 48000);
+//         // .wav <---> AudioFormat.WAV
+//         // .mp4 .m4a .aac <---> AudioFormat.AAC
+//         // AudioFormat is optional, if given value, will overwrite path extension when there is conflicts.
+//         _recorder = FlutterAudioRecorder(customPath,
+//             audioFormat: AudioFormat.WAV, sampleRate: 48000);
 
-        await _recorder.initialized;
-        // after initialization
-        var current = await _recorder.current(channel: 0);
-        print(current);
-        // should be "Initialized", if all working fine
-        setState(() {
-          _current = current;
-          _currentStatus = current.status;
-          print(_currentStatus);
-        });
-      } else {
-        Scaffold.of(context).showSnackBar(
-            new SnackBar(content: new Text("You must accept permissions")));
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
+//         await _recorder.initialized;
+//         // after initialization
+//         var current = await _recorder.current(channel: 0);
+//         print(current);
+//         // should be "Initialized", if all working fine
+//         setState(() {
+//           _current = current;
+//           _currentStatus = current.status;
+//           print(_currentStatus);
+//         });
+//       } else {
+//         Scaffold.of(context).showSnackBar(
+//             new SnackBar(content: new Text("You must accept permissions")));
+//       }
+//     } catch (e) {
+//       print(e);
+//     }
+//   }
 
-  //Start recording
-  _start() async {
-    try {
-      await _recorder.start();
-      var recording = await _recorder.current(channel: 0);
-      setState(() {
-        _current = recording;
-      });
+//   //Start recording
+//   _start() async {
+//     try {
+//       await _recorder.start();
+//       var recording = await _recorder.current(channel: 0);
+//       setState(() {
+//         _current = recording;
+//       });
 
-      const tick = const Duration(milliseconds: 50);
-      new Timer.periodic(tick, (Timer t) async {
-        if (_currentStatus == RecordingStatus.Stopped) {
-          t.cancel();
-        }
+//       const tick = const Duration(milliseconds: 50);
+//       new Timer.periodic(tick, (Timer t) async {
+//         if (_currentStatus == RecordingStatus.Stopped) {
+//           t.cancel();
+//         }
 
-        var current = await _recorder.current(channel: 0);
-        print(current.status);
-        setState(() {
-          _current = current;
-          _currentStatus = _current.status;
-        });
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
+//         var current = await _recorder.current(channel: 0);
+//         print(current.status);
+//         setState(() {
+//           _current = current;
+//           _currentStatus = _current.status;
+//         });
+//       });
+//     } catch (e) {
+//       print(e);
+//     }
+//   }
 
-  //Stop recording
-  _stop() async {
-    var result = await _recorder.stop();
-    print("Stop recording: ${result.path}");
-    print("Stop recording: ${result.duration}");
+//   //Stop recording
+//   _stop() async {
+//     var result = await _recorder.stop();
+//     print("Stop recording: ${result.path}");
+//     print("Stop recording: ${result.duration}");
 
-    setState(() {
-      _current = result;
-      _currentStatus = _current.status;
-    });
-  }
+//     setState(() {
+//       _current = result;
+//       _currentStatus = _current.status;
+//     });
+//   }
+
+//   @override
+//   void initState() {
+//     // TODO: implement initState
+//     _init();
+//     super.initState();
+//   }
+//   //END
+//   @override
+//   void dispose() {
+//     // TODO: implement dispose
+//     super.dispose();
+//   }
+  RecorderStream _recorder = RecorderStream();
+  PlayerStream _player = PlayerStream();
+
+  List<Uint8List> _micChunks = [];
+  bool _isRecording;
+  bool _isPlaying;
+
+  StreamSubscription _recorderStatus;
+  StreamSubscription _playerStatus;
+  StreamSubscription _audioStream;
 
   @override
   void initState() {
-    // TODO: implement initState
-    _init();
     super.initState();
+    initPlugin();
   }
-  //END
+
   @override
   void dispose() {
-    // TODO: implement dispose
+    _recorderStatus?.cancel();
+    _playerStatus?.cancel();
+    _audioStream?.cancel();
     super.dispose();
   }
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> initPlugin() async {
+    _recorderStatus = _recorder.status.listen((status) {
+      if (mounted)
+        setState(() {
+          _isRecording = status == SoundStreamStatus.Playing;
+        });
+    });
+
+    _audioStream = _recorder.audioStream.listen((data) {
+      _micChunks.add(data);
+    });
+
+    _playerStatus = _player.status.listen((status) {
+      if (mounted)
+        setState(() {
+          _isPlaying = status == SoundStreamStatus.Playing;
+        });
+    });
+
+    await Future.wait([
+      _recorder.initialize(),
+      _player.initialize(),
+    ]);
+  }
+
+  void _playAudio() async {
+    await _player.start();
+
+    if (_micChunks.isNotEmpty) {
+      for (var chunk in _micChunks) {
+        await _player.writeChunk(chunk);
+      }
+      _micChunks.clear();
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final widgetHelper = Provider.of<WidgetHelper>(context);
@@ -205,7 +270,7 @@ class _PressToTalkState extends State<PressToTalk> {
                 children: [
                   Container(
                     padding: EdgeInsets.only(
-                      top:30.0,
+                      top: 30.0,
                       left: 30.0,
                     ),
                     child: Text(
@@ -260,22 +325,19 @@ class _PressToTalkState extends State<PressToTalk> {
                   flex: 9,
                   child: GestureDetector(
                     onLongPress: () async {
-                      if (_currentStatus == RecordingStatus.Initialized) {
-                        _start();
-                        widgetHelper.micButtonAnimation = 'OnPressedStart';
-                        widgetHelper.micButtonAnimation = 'OnPressedHold';
-                      } else {
-                        print('Not Initialized');
-                      }
+                      _isRecording = true;
+                      await _recorder.start();
                     },
                     onLongPressUp: () async {
-                      if (_currentStatus == RecordingStatus.Recording) {
-                        widgetHelper.micButtonAnimation = 'OnReleaseStop';
-                        _stop();
+                      if(_isRecording == true)
+                      {
+                        await _recorder.stop();
+                        _playAudio();
+                        if(_micChunks.length == 0)
+                        {
+                          await _player.stop();
+                        }
                       }
-                      Future.delayed(Duration(seconds: 1), () {
-                        _init();
-                      });
                     },
                     child: Container(
                       padding: EdgeInsets.only(bottom: 65.0),

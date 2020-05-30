@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
+import 'dart:io';
 import 'dart:typed_data';
-
+import 'package:udp/udp.dart';
 import 'package:chewie_audio/chewie_audio.dart';
 import 'package:eventify/eventify.dart' as Emitter;
 import 'package:flutter/cupertino.dart';
@@ -55,7 +56,7 @@ class SocketServiceProvider {
     io.listen(3000);
   }
 
-  static void initializeClientSocket() {
+  static void initializeClientSocket() async {
     List events = [
       'connect',
       'connect_error',
@@ -117,27 +118,28 @@ class SocketServiceProvider {
         socket.on('voice_message', (data) {
           Emitter.EventEmitter emitter = Emitter.EventEmitter();
           Emitter.Listener subscriber =
-              emitter.on('timer', null, (ev, context) async{
-              var bytesArray = utf8.encode(data[0]);
-              if(!audioPlaying)
-              {
-                audioPlaying = true;
-                audioPlayer = ChewieAudio(
-                  controller: ChewieAudioController(
-                    autoPlay: true,
-                    autoInitialize: true,
-                    
-                  ),
-                );                
-              }
-              Timer.periodic(Duration(milliseconds: 600000), (v){
-                if(turnOffgreen == 2){
+              emitter.on('timer', null, (ev, context) async {
+            
+            if (!audioPlaying) {
+              audioPlaying = true;
+              audioPlayer = ChewieAudio(
+                controller: ChewieAudioController(
+                  autoPlay: true,
+                  autoInitialize: true,
+                ),
+              );
+            }
+            Timer.periodic(Duration(milliseconds: 600000), (v) {
+              try {
+                if (turnOffgreen == 2) {
                   audioPlaying = false;
                   turnOnGreen = false;
-                  
                 }
-              });
-              
+                turnOffgreen++;
+              } catch (e) {
+                print(e);
+              }
+            });
           });
         });
         socket.connect();
@@ -147,6 +149,27 @@ class SocketServiceProvider {
     } catch (e) {
       print(e);
     }
+
+    var receiver = await UDP.bind(
+      Endpoint.loopback(
+        port: Port(6666),
+      ),
+    );
+    
+    receiver.listen(
+      (dataGram) {
+        var packet = String.fromCharCodes(dataGram.data,dataGram.data.length);
+        stdout.write(packet);
+        Uint8List bytesArray = utf8.encode(packet);
+        var stringData = String.fromCharCodes(bytesArray,0,bytesArray.length);
+        print(stringData);
+      },
+      timeout: Duration(
+        seconds: 20,
+      ),
+    );
+
+    receiver.close();
   }
 
   //Sender

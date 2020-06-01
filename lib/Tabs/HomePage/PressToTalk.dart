@@ -1,12 +1,9 @@
 import 'dart:async';
-import 'dart:io' as io;
 import 'package:file/local.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:quicktalk_replica/Provider/WidgetHelper.dart';
 import 'dart:typed_data';
@@ -31,107 +28,6 @@ class _PressToTalkState extends State<PressToTalk> {
     'Member 6'
   ];
 
-  //All of this is for recording the audio when the mic button is onhold
-  //NOTE: Always use the _init() fucntion after recording
-
-//   FlutterAudioRecorder _recorder;
-//   Recording _current;
-//   RecordingStatus _currentStatus = RecordingStatus.Unset;
-
-//   //Initialize Access for mic.
-//   _init() async {
-//     try {
-//       if (await FlutterAudioRecorder.hasPermissions) {
-//         String customPath = '/QTAudioRecording';
-//         io.Directory appDocDirectory;
-// //        io.Directory appDocDirectory = await getApplicationDocumentsDirectory();
-//         if (io.Platform.isIOS) {
-//           appDocDirectory = await getApplicationDocumentsDirectory();
-//         } else {
-//           appDocDirectory = await getExternalStorageDirectory();
-//         }
-
-//         // can add extension like ".mp4" ".wav" ".m4a" ".aac"
-//         customPath = appDocDirectory.path +
-//             customPath +
-//             DateTime.now().millisecondsSinceEpoch.toString();
-
-//         // .wav <---> AudioFormat.WAV
-//         // .mp4 .m4a .aac <---> AudioFormat.AAC
-//         // AudioFormat is optional, if given value, will overwrite path extension when there is conflicts.
-//         _recorder = FlutterAudioRecorder(customPath,
-//             audioFormat: AudioFormat.WAV, sampleRate: 48000);
-
-//         await _recorder.initialized;
-//         // after initialization
-//         var current = await _recorder.current(channel: 0);
-//         print(current);
-//         // should be "Initialized", if all working fine
-//         setState(() {
-//           _current = current;
-//           _currentStatus = current.status;
-//           print(_currentStatus);
-//         });
-//       } else {
-//         Scaffold.of(context).showSnackBar(
-//             new SnackBar(content: new Text("You must accept permissions")));
-//       }
-//     } catch (e) {
-//       print(e);
-//     }
-//   }
-
-//   //Start recording
-//   _start() async {
-//     try {
-//       await _recorder.start();
-//       var recording = await _recorder.current(channel: 0);
-//       setState(() {
-//         _current = recording;
-//       });
-
-//       const tick = const Duration(milliseconds: 50);
-//       new Timer.periodic(tick, (Timer t) async {
-//         if (_currentStatus == RecordingStatus.Stopped) {
-//           t.cancel();
-//         }
-
-//         var current = await _recorder.current(channel: 0);
-//         print(current.status);
-//         setState(() {
-//           _current = current;
-//           _currentStatus = _current.status;
-//         });
-//       });
-//     } catch (e) {
-//       print(e);
-//     }
-//   }
-
-//   //Stop recording
-//   _stop() async {
-//     var result = await _recorder.stop();
-//     print("Stop recording: ${result.path}");
-//     print("Stop recording: ${result.duration}");
-
-//     setState(() {
-//       _current = result;
-//       _currentStatus = _current.status;
-//     });
-//   }
-
-//   @override
-//   void initState() {
-//     // TODO: implement initState
-//     _init();
-//     super.initState();
-//   }
-//   //END
-//   @override
-//   void dispose() {
-//     // TODO: implement dispose
-//     super.dispose();
-//   }
   RecorderStream _recorder = RecorderStream();
   PlayerStream _player = PlayerStream();
 
@@ -192,8 +88,12 @@ class _PressToTalkState extends State<PressToTalk> {
       }
       _micChunks.clear();
     }
-  }
 
+    if (_micChunks.isEmpty) {
+      _player.stop();
+      _isPlaying = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -325,18 +225,26 @@ class _PressToTalkState extends State<PressToTalk> {
                   flex: 9,
                   child: GestureDetector(
                     onLongPress: () async {
-                      _isRecording = true;
-                      await _recorder.start();
+                      if (_isPlaying == false) {
+                        _isRecording = true;
+                        await _recorder.start();
+                        widgetHelper.micButtonAnimation = 'OnPressedHold';
+                      } else {
+                        Fluttertoast.showToast(
+                            msg: "Someone is still speaking!",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                      }
                     },
                     onLongPressUp: () async {
-                      if(_isRecording == true)
-                      {
+                      if (_isRecording == true) {
                         await _recorder.stop();
                         _playAudio();
-                        if(_micChunks.length == 0)
-                        {
-                          await _player.stop();
-                        }
+                        widgetHelper.micButtonAnimation = 'OnReleaseStop';
                       }
                     },
                     child: Container(

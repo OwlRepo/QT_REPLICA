@@ -27,7 +27,18 @@ class _PressToTalkState extends State<PressToTalk> {
     'Member 5',
     'Member 6'
   ];
+  bool _isConnectedToSocket;
+  String _connectionMSG;
+  
+  
 
+  _connecToSocket(){
+    print('Connecting to socket...');
+  }
+
+
+
+  
   RecorderStream _recorder = RecorderStream();
   PlayerStream _player = PlayerStream();
 
@@ -38,20 +49,6 @@ class _PressToTalkState extends State<PressToTalk> {
   StreamSubscription _recorderStatus;
   StreamSubscription _playerStatus;
   StreamSubscription _audioStream;
-
-  @override
-  void initState() {
-    super.initState();
-    initPlugin();
-  }
-
-  @override
-  void dispose() {
-    _recorderStatus?.cancel();
-    _playerStatus?.cancel();
-    _audioStream?.cancel();
-    super.dispose();
-  }
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlugin() async {
@@ -93,6 +90,22 @@ class _PressToTalkState extends State<PressToTalk> {
       _player.stop();
       _isPlaying = false;
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initPlugin();
+    _isConnectedToSocket = false;
+    _connectionMSG = 'Connecting..';
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _recorderStatus?.cancel();
+    _playerStatus?.cancel();
+    _audioStream?.cancel();
   }
 
   @override
